@@ -28,6 +28,7 @@ Documentación de la API
 La API expone los siguientes endpoints:
 
 Autenticación de Usuarios
+
 POST /users/login: Autentica a un usuario.
 {
     "username": "user1",
@@ -38,8 +39,11 @@ o
     "username": "user2",
     "password": "user_2"
 }
+
 Endpoints de Tareas
+
 GET /tasks: Obtiene todas las tareas para un usuario autenticado.
+
 POST /tasks: Crea una nueva tarea.
 {       
         "title": " Tarea nueva",
@@ -47,5 +51,41 @@ POST /tasks: Crea una nueva tarea.
         "priority": "low",
         "userId": 3
 }
+
 PUT /tasks/{id}: Actualiza si fue completada una tarea existente.
+
 DELETE /tasks/{id}: Elimina una tarea existente.
+
+--Script base de datos
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+
+
+CREATE TABLE task (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
+    priority VARCHAR(50),
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+INSERT INTO users (id, username, password)
+VALUES 
+(1,'user1', 'user_1'),
+(2,'user2', 'user_2'),
+(3,'user3', 'user_3');
+
+INSERT INTO task (id, title, completed, priority, user_id)
+VALUES 
+(1,'Estudiar PostgreSQL', TRUE, 'low', 1),
+(2,'Desarrollar API REST', FALSE, 'high', 1),
+(3,'Leer documentación de Spring', TRUE, 'medium', 2);
+(4,'Leer de Spring', TRUE, 'medium', 3);
+
+utilizamos postgreSQL para la DB
